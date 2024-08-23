@@ -6,8 +6,13 @@ import {
   decrement,
   reset,
   incrementBy,
+  undoLastAction,
 } from '../../store/counter.action';
-import { selectCounter, selectHistory } from '../../store/counter.selectors';
+import {
+  selectCounter,
+  selectHistory,
+  selectPreviousStates,
+} from '../../store/counter.selectors';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CounterState } from '../../store/counter.reducer';
@@ -23,6 +28,7 @@ import { CounterHistoryState } from '../../store/counter-history.reducer';
 export class CounterComponent {
   count$!: Observable<CounterState>;
   history$!: Observable<CounterHistoryState>;
+  previousState$!: Observable<CounterState>;
   incrementByValue: number = 1;
 
   constructor(private store: Store) {}
@@ -30,6 +36,7 @@ export class CounterComponent {
   ngOnInit(): void {
     this.count$ = this.store.select(selectCounter);
     this.history$ = this.store.select(selectHistory);
+    this.previousState$ = this.store.select(selectPreviousStates);
   }
 
   increment(): void {
@@ -50,5 +57,10 @@ export class CounterComponent {
   incrementBy(): void {
     console.log('IncrementBy button clicked');
     this.store.dispatch(incrementBy({ value: this.incrementByValue }));
+  }
+
+  undoLastAction(): void {
+    console.log('Undo last action button clicked');
+    this.store.dispatch(undoLastAction());
   }
 }
