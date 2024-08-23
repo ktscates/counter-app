@@ -11,23 +11,31 @@ export interface CounterHistoryState {
   history: number[];
 }
 
-const initialHistoryState: CounterHistoryState = {
+const initialState: CounterHistoryState = {
   history: [],
 };
 
 const _counterHistoryReducer = createReducer(
-  initialHistoryState,
+  initialState,
   on(increment, (state) => ({
-    history: [...state.history, state.history[state.history.length - 1] + 1],
+    history: [
+      ...state.history,
+      (state.history[state.history.length - 1] || 0) + 1,
+    ],
   })),
   on(decrement, (state) => ({
-    history: [...state.history, state.history[state.history.length - 1] - 1],
+    history: [
+      ...state.history,
+      (state.history[state.history.length - 1] || 0) - 1,
+    ],
   })),
-  on(reset, (state) => ({ history: [...state.history, 0] })),
+  on(reset, (state) => ({
+    history: [...state.history, 0],
+  })),
   on(incrementBy, (state, { value }) => ({
     history: [
       ...state.history,
-      state.history[state.history.length - 1] + value,
+      (state.history[state.history.length - 1] || 0) + value,
     ],
   })),
   on(undoLastAction, (state) => {

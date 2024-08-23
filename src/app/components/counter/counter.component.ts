@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
@@ -40,27 +40,22 @@ export class CounterComponent {
   }
 
   increment(): void {
-    console.log('Increment button clicked');
     this.store.dispatch(increment());
   }
 
   decrement(): void {
-    console.log('Decrement button clicked');
     this.store.dispatch(decrement());
   }
 
   reset(): void {
-    console.log('Reset button clicked');
     this.store.dispatch(reset());
   }
 
   incrementBy(): void {
-    console.log('IncrementBy button clicked');
     this.store.dispatch(incrementBy({ value: this.incrementByValue }));
   }
 
   undoLastAction(): void {
-    console.log('Undo last action button clicked');
     this.store.dispatch(undoLastAction());
   }
 }
