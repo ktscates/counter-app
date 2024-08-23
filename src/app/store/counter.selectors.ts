@@ -1,17 +1,25 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { CounterHistoryState } from './counterHistory';
+import { CounterHistoryState } from './counter-history.reducer';
 import { CounterState } from './counter.reducer';
+import { AppState } from './reducers'; // Ensure correct path
 
-// Create a feature selector for the CounterState
-const selectCounterFeature = createFeatureSelector<CounterState>('count');
+// Create feature selectors
+const selectCounterFeature = createFeatureSelector<AppState>('count');
+const selectCounterHistoryFeature = createFeatureSelector<AppState>('history');
 
-// Define selectors to get specific parts of the CounterState
+// Define selectors for CounterState
 export const selectCounter = createSelector(
   selectCounterFeature,
-  (state: CounterState) => state.count
+  (state) => state.count
+);
+
+// Define selectors for CounterState
+export const selectPreviousStates = createSelector(
+  selectCounterFeature,
+  (state) => state.previousStates
 );
 
 export const selectHistory = createSelector(
-  selectCounterFeature,
-  (state: CounterState) => state.history
+  selectCounterHistoryFeature,
+  (state) => state.history
 );

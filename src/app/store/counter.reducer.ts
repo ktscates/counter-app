@@ -10,11 +10,11 @@ import {
 // Define the initial state for the counter
 export interface CounterState {
   count: number;
-  previousCount: number;
+  previousStates: number[];
 }
 export const initialState: CounterState = {
   count: 0,
-  previousCount: 0,
+  previousStates: [],
 };
 
 const _counterReducer = createReducer(
@@ -22,17 +22,34 @@ const _counterReducer = createReducer(
   on(increment, (state) => ({
     previousCount: state.count,
     count: state.count + 1,
+    previousStates: [...state.previousStates, state.count],
   })),
   on(decrement, (state) => ({
     previousCount: state.count,
     count: state.count > 0 ? state.count - 1 : state.count,
+    previousStates: [...state.previousStates, state.count],
   })),
-  on(reset, (state) => ({ previousCount: state.count, count: 0 })),
+  on(reset, (state) => ({
+    count: 0,
+    previousStates: [...state.previousStates, state.count],
+  })),
   on(incrementBy, (state, { value }) => ({
     previousCount: state.count,
     count: state.count + value,
+    previousStates: [...state.previousStates, state.count],
   })),
-  on(undoLastAction, (state) => ({ ...state, count: state.previousCount }))
+  on(undoLastAction, (state) => {
+    if (state.previousStates.length > 0) {
+      const previousState =
+        state.previousStates[state.previousStates.length - 1];
+      return {
+        ...state,
+        count: previousState,
+        previousStates: state.previousStates.slice(0, -1),
+      };
+    }
+    return state;
+  })
 );
 
 export function counterReducer(

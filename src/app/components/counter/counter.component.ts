@@ -10,6 +10,8 @@ import {
 import { selectCounter, selectHistory } from '../../store/counter.selectors';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CounterState } from '../../store/counter.reducer';
+import { CounterHistoryState } from '../../store/counter-history.reducer';
 
 @Component({
   selector: 'app-counter',
@@ -19,8 +21,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './counter.component.css',
 })
 export class CounterComponent {
-  count$!: Observable<number>;
-  history$!: Observable<number[]>;
+  count$!: Observable<CounterState>;
+  history$!: Observable<CounterHistoryState>;
   incrementByValue: number = 1;
 
   constructor(private store: Store) {}
