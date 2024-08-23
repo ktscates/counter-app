@@ -1,27 +1,84 @@
-# CounterApp
+# NgRx Counter Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Running the App](#running-the-app)
+- [State Management](#state-management)
+  - [CounterState](#counterstate)
+  - [CounterHistoryState](#counterhistorystate)
+- [Customization](#customization)
+  - [Adding New Actions](#adding-new-actions)
+- [Troubleshooting](#troubleshooting)
+  - [Common Errors](#common-errors)
+- [Live Link](#live-link)
 
-## Development server
+## Introduction
+This is a simple counter application built using Angular and NgRx. The app allows users to increment, decrement, and reset a counter while maintaining a history of the counter values.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Features
+- Increment the counter
+- Decrement the counter
+- Reset the counter
+- Increment by value
+- Undo the last action
+- Track the history of the counter values
 
-## Code scaffolding
+## Technologies Used
+- Angular
+- NgRx for state management
+- TailwindCSS for styling
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Getting Started
 
-## Build
+### Installation
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. **Clone the repository**:
 
-## Running unit tests
+   ```bash
+   git clone https://github.com/ktscates/counter-app.git
+   cd frontend-quiz-app
+   ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. **Install dependencies**:
 
-## Running end-to-end tests
+   ```bash
+   npm install
+   ```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Running the App
 
-## Further help
+    ```bash
+    ng serve
+    ```
+    Open your browser and navigate to `http://localhost:4200/`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## State Management
+
+### CounterState
+This state handles the current value of the counter. Actions include incrementing, decrementing, resetting the counter, incrementing by any value, and undoing the last action.
+
+### CounterHistoryState
+This state manages an array that tracks the history of the counter values after each action. The history is updated every time the counter is incremented, decremented, reset, incremented by any value, or undo the last action.
+
+## Customization
+
+### Adding New Actions
+To add new actions, follow these steps:
+1. Define the action in `counter.action.ts`.
+2. Update the `counterReducer` in `counter.reducer.ts` to handle the new action.
+3. Modify the selectors in `counter.selectors.ts` to include any new data derived from the state.
+
+## Troubleshooting
+
+### Common Errors
+- **Undefined Property Error**: If you encounter an error such as "Cannot read properties of undefined (reading 'history')", ensure that your selectors are properly accessing the state and that the state has been initialized correctly.
+- **NaN in Counter History**: If your counter history shows NaN values, make sure that you're correctly handling initial values in the reducer. Check the history calculation to ensure it defaults to 0 when the history array is empty.
+
+## Live Link
+You can access the deployed application at [Ngrx Counter App](https://ktscates-counter-app.netlify.app/).
+
