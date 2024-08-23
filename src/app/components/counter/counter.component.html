@@ -1,0 +1,45 @@
+<div class="flex justify-center items-center min-h-screen">
+  <div class="bg-white p-24 rounded-xl shadow-lg w-1/2">
+    <h1 class="text-6xl font-bold mb-24 text-center">Counter</h1>
+    <h1 class="text-6xl font-bold mb-24 text-center">{{ count$ | async }}</h1>
+
+    <div class="flex flex-col gap-6">
+      <!-- Horizontal button group -->
+      <div class="flex justify-between items-center gap-6">
+        <button
+          class="bg-red-500 text-xl font-semibold text-white py-4 w-full rounded-lg hover:bg-red-600"
+          (click)="decrement()"
+        >
+          Decrement
+        </button>
+
+        <button
+          class="bg-gray-500 text-xl font-semibold text-white py-4 w-full rounded-lg hover:bg-gray-600"
+          (click)="reset()"
+        >
+          Reset
+        </button>
+        <button
+          class="bg-green-500 text-xl font-semibold text-white py-4 w-full rounded-lg hover:bg-green-600"
+          (click)="increment()"
+        >
+          Increment
+        </button>
+      </div>
+      <!-- Input and button below the group -->
+      <div class="flex flex-col gap-6 items-center mt-6">
+        <input
+          #incrementValue
+          type="number"
+          placeholder="Increment by"
+          class="border border-gray-300 p-3 rounded"
+        />
+        <button
+          class="bg-blue-500 text-xl font-semibold text-white py-3 px-6 rounded hover:bg-blue-600"
+        >
+          Increment By
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
