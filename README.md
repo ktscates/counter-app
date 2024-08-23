@@ -1,6 +1,10 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/bb882a61-2149-4851-bb59-22261fc5c1fd/deploy-status)](https://app.netlify.com/sites/ktscates-counter-app/deploys)
+![Github actions](https://github.com/ktscates/counter-app/actions/workflows/node.js.yml/badge.svg)
+
 # NgRx Counter Application
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -17,9 +21,11 @@
 - [Live Link](#live-link)
 
 ## Introduction
+
 This is a simple counter application built using Angular and NgRx. The app allows users to increment, decrement, and reset a counter while maintaining a history of the counter values.
 
 ## Features
+
 - Increment the counter
 - Decrement the counter
 - Reset the counter
@@ -28,6 +34,7 @@ This is a simple counter application built using Angular and NgRx. The app allow
 - Track the history of the counter values
 
 ## Technologies Used
+
 - Angular
 - NgRx for state management
 - TailwindCSS for styling
@@ -56,19 +63,22 @@ This is a simple counter application built using Angular and NgRx. The app allow
     ```
     Open your browser and navigate to `http://localhost:4200/`.
 
-
 ## State Management
 
 ### CounterState
+
 This state handles the current value of the counter. Actions include incrementing, decrementing, resetting the counter, incrementing by any value, and undoing the last action.
 
 ### CounterHistoryState
+
 This state manages an array that tracks the history of the counter values after each action. The history is updated every time the counter is incremented, decremented, reset, incremented by any value, or undo the last action.
 
 ## Customization
 
 ### Adding New Actions
+
 To add new actions, follow these steps:
+
 1. Define the action in `counter.action.ts`.
 2. Update the `counterReducer` in `counter.reducer.ts` to handle the new action.
 3. Modify the selectors in `counter.selectors.ts` to include any new data derived from the state.
@@ -76,9 +86,10 @@ To add new actions, follow these steps:
 ## Troubleshooting
 
 ### Common Errors
+
 - **Undefined Property Error**: If you encounter an error such as "Cannot read properties of undefined (reading 'history')", ensure that your selectors are properly accessing the state and that the state has been initialized correctly.
 - **NaN in Counter History**: If your counter history shows NaN values, make sure that you're correctly handling initial values in the reducer. Check the history calculation to ensure it defaults to 0 when the history array is empty.
 
 ## Live Link
-You can access the deployed application at [Ngrx Counter App](https://ktscates-counter-app.netlify.app/).
 
+You can access the deployed application at [Ngrx Counter App](https://ktscates-counter-app.netlify.app/).
