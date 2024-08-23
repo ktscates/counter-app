@@ -7,7 +7,7 @@ import {
   reset,
   incrementBy,
 } from '../../store/counter.action';
-import { selectCounter } from '../../store/counter.selectors';
+import { selectCounter, selectHistory } from '../../store/counter.selectors';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -20,27 +20,33 @@ import { FormsModule } from '@angular/forms';
 })
 export class CounterComponent {
   count$!: Observable<number>;
+  history$!: Observable<number[]>;
   incrementByValue: number = 1;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.count$ = this.store.select(selectCounter);
+    this.history$ = this.store.select(selectHistory);
   }
 
   increment(): void {
+    console.log('Increment button clicked');
     this.store.dispatch(increment());
   }
 
   decrement(): void {
+    console.log('Decrement button clicked');
     this.store.dispatch(decrement());
   }
 
   reset(): void {
+    console.log('Reset button clicked');
     this.store.dispatch(reset());
   }
 
   incrementBy(): void {
+    console.log('IncrementBy button clicked');
     this.store.dispatch(incrementBy({ value: this.incrementByValue }));
   }
 }

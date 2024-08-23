@@ -6,11 +6,12 @@ import { createReducer, provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { counterReducer } from './store/counter.reducer';
 import { FormsModule } from '@angular/forms';
+import { counterHistoryReducer } from './store/counter-history.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideStore({ count: counterReducer }),
+    provideStore({ count: counterReducer, history: counterHistoryReducer }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     FormsModule,
   ],
