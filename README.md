@@ -40,7 +40,7 @@ This is a simple counter application built using Angular and NgRx. The app allow
 
    ```bash
    git clone https://github.com/ktscates/counter-app.git
-   cd frontend-quiz-app
+   cd counter-app
    ```
 
 2. **Install dependencies**:
