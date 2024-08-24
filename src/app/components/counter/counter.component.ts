@@ -16,24 +16,20 @@ import { CounterState, CounterHistoryState } from '../../models/types';
 })
 export class CounterComponent implements OnInit {
   count$!: Observable<CounterState>;
-  history$!: Observable<CounterHistoryState>;
-  previousState$!: Observable<CounterState>;
-  incrementByValue: number = 1;
+  incrementByValue: number = 0;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.count$ = this.store.select(selector.selectCounter);
-    this.history$ = this.store.select(selector.selectHistory);
-    this.previousState$ = this.store.select(selector.selectPreviousStates);
   }
 
   increment(): void {
-    this.store.dispatch(actions.increment());
+    this.store.dispatch(actions.increment({ value: 1 }));
   }
 
   decrement(): void {
-    this.store.dispatch(actions.decrement());
+    this.store.dispatch(actions.decrement({ value: 1 }));
   }
 
   reset(): void {
@@ -45,6 +41,6 @@ export class CounterComponent implements OnInit {
   }
 
   undoLastAction(): void {
-    this.store.dispatch(actions.undoLastAction());
+    this.store.dispatch(actions.undoLastAction({ value: 1 }));
   }
 }

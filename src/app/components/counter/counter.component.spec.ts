@@ -32,13 +32,12 @@ describe('CounterComponent', () => {
     fixture.detectChanges();
     component.ngOnInit();
     expect(component.count$).toBeTruthy();
-    expect(component.history$).toBeTruthy();
-    expect(component.previousState$).toBeTruthy();
   });
 
   it('should dispatch increment action ', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const action = actions.increment();
+    const value = 1;
+    const action = actions.increment({ value });
     component.increment();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
     expect(action.type).toBe('[Counter] Increment');
@@ -46,7 +45,8 @@ describe('CounterComponent', () => {
 
   it('should dispatch decrement action', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const action = actions.decrement();
+    const value = 1;
+    const action = actions.decrement({ value });
     component.decrement();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
     expect(action.type).toBe('[Counter] Decrement');
@@ -57,7 +57,8 @@ describe('CounterComponent', () => {
       count: 10,
       previousStates: [0, 1, 5, 7, 9],
     };
-    const action = actions.decrement();
+    const value = 1;
+    const action = actions.decrement({ value });
     const state = counterReducer(initialState, action);
     expect(state.count).toBe(9);
     expect(state.previousStates).toStrictEqual([0, 1, 5, 7, 9, 10]);
@@ -83,7 +84,8 @@ describe('CounterComponent', () => {
 
   it('should dispatch undoLastAction action ', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const action = actions.undoLastAction();
+    const value = 1;
+    const action = actions.undoLastAction({ value });
     component.undoLastAction();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
     expect(action.type).toBe('[Counter] Undo Last Action');
@@ -94,7 +96,8 @@ describe('CounterComponent', () => {
       count: 10,
       previousStates: [5, 7, 10],
     };
-    const action = actions.undoLastAction();
+    const value = 1;
+    const action = actions.undoLastAction({ value });
     const state = counterReducer(initialState, action);
     expect(state.count).toBe(10);
     expect(state.previousStates).toEqual([5, 7]);
@@ -104,7 +107,8 @@ describe('CounterComponent', () => {
     const initialState: type.CounterHistoryState = {
       history: [5, 7, 10],
     };
-    const action = actions.undoLastAction();
+    const value = 1;
+    const action = actions.undoLastAction({ value });
     const state = counterHistoryReducer(initialState, action);
     expect(state.history).toStrictEqual([5, 7]);
   });
@@ -126,5 +130,24 @@ describe('CounterComponent', () => {
     };
     const result = selector.selectHistory.projector(appState);
     expect(result.history).toStrictEqual([1, 2, 3]);
+  });
+
+  it('should select the previousStates from CounterState', () => {
+    const historyState: type.CounterHistoryState = {
+      history: [1, 2, 3],
+    };
+    const appState: type.AppState = {
+      count: {
+        count: 5,
+        previousStates: [4, 5],
+      },
+      previousStates: {
+        count: 5,
+        previousStates: [4, 5],
+      },
+      history: historyState,
+    };
+    const result = selector.selectPreviousStates.projector(appState);
+    expect(result.previousStates).toStrictEqual([4, 5]);
   });
 });

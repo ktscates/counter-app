@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { CounterActions, CounterState } from '../models/types';
 import * as actions from './counter.action';
+import { act } from '@ngrx/effects';
 
 // Define the initial state for the counter
 export const initialState: CounterState = {
@@ -10,12 +11,12 @@ export const initialState: CounterState = {
 
 const _counterReducer = createReducer(
   initialState,
-  on(actions.increment, (state) => ({
-    count: state.count + 1,
+  on(actions.increment, (state, action) => ({
+    count: state.count + action.value,
     previousStates: [...state.previousStates, state.count],
   })),
-  on(actions.decrement, (state) => ({
-    count: state.count > 0 ? state.count - 1 : state.count,
+  on(actions.decrement, (state, action) => ({
+    count: state.count > 0 ? state.count - action.value : state.count,
     previousStates: [...state.previousStates, state.count],
   })),
   on(actions.reset, (state) => ({
@@ -26,14 +27,14 @@ const _counterReducer = createReducer(
     count: state.count + value,
     previousStates: [...state.previousStates, state.count],
   })),
-  on(actions.undoLastAction, (state) => {
+  on(actions.undoLastAction, (state, action) => {
     if (state.previousStates.length > 0) {
       const previousState =
-        state.previousStates[state.previousStates.length - 1];
+        state.previousStates[state.previousStates.length - action.value];
       return {
         ...state,
         count: previousState,
-        previousStates: state.previousStates.slice(0, -1),
+        previousStates: state.previousStates.slice(0, -action.value),
       };
     }
     return state;

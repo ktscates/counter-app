@@ -9,16 +9,16 @@ const initialState: CounterHistoryState = {
 
 const _counterHistoryReducer = createReducer(
   initialState,
-  on(actions.increment, (state) => ({
+  on(actions.increment, (state, action) => ({
     history: [
       ...state.history,
-      (state.history[state.history.length - 1] || 0) + 1,
+      (state.history[state.history.length - action.value] || 0) + action.value,
     ],
   })),
-  on(actions.decrement, (state) => ({
+  on(actions.decrement, (state, action) => ({
     history: [
       ...state.history,
-      (state.history[state.history.length - 1] || 0) - 1,
+      (state.history[state.history.length - action.value] || 0) - action.value,
     ],
   })),
   on(actions.reset, (state) => ({
@@ -30,10 +30,10 @@ const _counterHistoryReducer = createReducer(
       (state.history[state.history.length - 1] || 0) + value,
     ],
   })),
-  on(actions.undoLastAction, (state) => {
+  on(actions.undoLastAction, (state, action) => {
     if (state.history.length > 1) {
       return {
-        history: state.history.slice(0, -1),
+        history: state.history.slice(0, -action.value),
       };
     } else {
       return state;

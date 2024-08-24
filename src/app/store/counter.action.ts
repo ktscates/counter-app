@@ -8,11 +8,14 @@ export const INCREMENT_BY = '[Counter] Increment by';
 export const UNDO_LAST_ACTION = '[Counter] Undo Last Action';
 
 // Implement actions for increment, decrement, and reset
-export const increment = createAction(INCREMENT);
-export const decrement = createAction(DECREMENT);
+export const increment = createAction(INCREMENT, props<{ value: number }>());
+export const decrement = createAction(DECREMENT, props<{ value: number }>());
 export const reset = createAction(RESET);
 export const incrementBy = createAction(
   INCREMENT_BY,
   props<{ value: number }>()
 );
-export const undoLastAction = createAction(UNDO_LAST_ACTION);
+export const undoLastAction = createAction(
+  UNDO_LAST_ACTION,
+  props<{ value: number }>()
+);
