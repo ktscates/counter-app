@@ -38,7 +38,10 @@ const _counterHistoryReducer = createReducer(
     } else {
       return state;
     }
-  })
+  }),
+  on(actions.setEffects, (state, action) => ({
+    history: [...state.history, action.value],
+  }))
 );
 
 export function counterHistoryReducer(

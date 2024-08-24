@@ -1,7 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { CounterActions, CounterState } from '../models/types';
 import * as actions from './counter.action';
-import { act } from '@ngrx/effects';
 
 // Define the initial state for the counter
 export const initialState: CounterState = {
@@ -19,8 +18,8 @@ const _counterReducer = createReducer(
     count: state.count > 0 ? state.count - action.value : state.count,
     previousStates: [...state.previousStates, state.count],
   })),
-  on(actions.reset, (state) => ({
-    count: 0,
+  on(actions.reset, (state, action) => ({
+    count: action.value,
     previousStates: [...state.previousStates, state.count],
   })),
   on(actions.incrementBy, (state, { value }) => ({
@@ -38,7 +37,11 @@ const _counterReducer = createReducer(
       };
     }
     return state;
-  })
+  }),
+  on(actions.setEffects, (state, action) => ({
+    count: action.value,
+    previousStates: [...state.previousStates, state.count],
+  }))
 );
 
 export function counterReducer(

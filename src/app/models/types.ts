@@ -1,17 +1,13 @@
-import {
-  decrement,
-  increment,
-  incrementBy,
-  reset,
-  undoLastAction,
-} from '../store/counter.action';
+import * as action from '../store/counter.action';
 
 export type CounterActions =
-  | ReturnType<typeof increment>
-  | ReturnType<typeof decrement>
-  | ReturnType<typeof reset>
-  | ReturnType<typeof incrementBy>
-  | ReturnType<typeof undoLastAction>;
+  | ReturnType<typeof action.increment>
+  | ReturnType<typeof action.decrement>
+  | ReturnType<typeof action.reset>
+  | ReturnType<typeof action.incrementBy>
+  | ReturnType<typeof action.undoLastAction>
+  | ReturnType<typeof action.initEffects>
+  | ReturnType<typeof action.setEffects>;
 
 export interface AppState {
   count: CounterState;

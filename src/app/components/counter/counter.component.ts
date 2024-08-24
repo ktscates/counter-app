@@ -33,7 +33,7 @@ export class CounterComponent implements OnInit {
   }
 
   reset(): void {
-    this.store.dispatch(actions.reset());
+    this.store.dispatch(actions.reset({ value: 0 }));
   }
 
   incrementBy(): void {

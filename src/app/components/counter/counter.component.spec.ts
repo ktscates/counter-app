@@ -66,7 +66,8 @@ describe('CounterComponent', () => {
 
   it('should dispatch reset action', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    const action = actions.reset();
+    const value = 0;
+    const action = actions.reset({ value });
     component.reset();
     expect(dispatchSpy).toHaveBeenCalledWith(action);
     expect(action.type).toBe('[Counter] Reset');
@@ -149,5 +150,34 @@ describe('CounterComponent', () => {
     };
     const result = selector.selectPreviousStates.projector(appState);
     expect(result.previousStates).toStrictEqual([4, 5]);
+  });
+
+  it('should set the count to value and save the current count', () => {
+    const stateBefore: type.CounterState = {
+      count: 10,
+      previousStates: [1, 2, 3],
+    };
+    const value = 5;
+    const action = actions.setEffects({ value });
+    const result = counterReducer(stateBefore, action);
+    const expectedState: type.CounterState = {
+      count: value,
+      previousStates: [...stateBefore.previousStates, stateBefore.count],
+    };
+    expect(result).toStrictEqual(expectedState);
+  });
+
+  it('should set the history to an array by adding the value', () => {
+    const stateBefore: type.CounterHistoryState = {
+      history: [1, 2, 3, 4],
+    };
+    const value = 5;
+    const action = actions.setEffects({ value });
+    const result = counterHistoryReducer(stateBefore, action);
+    const expectedState: type.CounterHistoryState = {
+      history: [...stateBefore.history, value],
+    };
+
+    expect(result).toStrictEqual(expectedState);
   });
 });

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CounterComponent } from './components/counter/counter.component';
+import { Store } from '@ngrx/store';
+import { initEffects } from './store/counter.action';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,12 @@ import { CounterComponent } from './components/counter/counter.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'counter-app';
+
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.store.dispatch(initEffects());
+  }
 }
