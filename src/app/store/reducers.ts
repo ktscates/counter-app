@@ -1,15 +1,7 @@
 import { ActionReducerMap } from '@ngrx/store';
-import { counterReducer, CounterState } from './counter.reducer';
-import {
-  counterHistoryReducer,
-  CounterHistoryState,
-} from './counter-history.reducer';
-
-export interface AppState {
-  count: CounterState;
-  previousStates: CounterState;
-  history: CounterHistoryState;
-}
+import { counterReducer } from './counter.reducer';
+import { counterHistoryReducer } from './counter-history.reducer';
+import { AppState } from '../models/types';
 
 export const reducers: ActionReducerMap<AppState> = {
   count: counterReducer,

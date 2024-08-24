@@ -1,15 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import {
-  increment,
-  decrement,
-  reset,
-  incrementBy,
-  undoLastAction,
-} from './counter.action';
-
-export interface CounterHistoryState {
-  history: number[];
-}
+import { CounterHistoryState } from '../models/types';
+import { CounterActions } from '../models/types';
+import * as actions from './counter.action';
 
 const initialState: CounterHistoryState = {
   history: [],
@@ -17,28 +9,28 @@ const initialState: CounterHistoryState = {
 
 const _counterHistoryReducer = createReducer(
   initialState,
-  on(increment, (state) => ({
+  on(actions.increment, (state) => ({
     history: [
       ...state.history,
       (state.history[state.history.length - 1] || 0) + 1,
     ],
   })),
-  on(decrement, (state) => ({
+  on(actions.decrement, (state) => ({
     history: [
       ...state.history,
       (state.history[state.history.length - 1] || 0) - 1,
     ],
   })),
-  on(reset, (state) => ({
+  on(actions.reset, (state) => ({
     history: [...state.history, 0],
   })),
-  on(incrementBy, (state, { value }) => ({
+  on(actions.incrementBy, (state, { value }) => ({
     history: [
       ...state.history,
       (state.history[state.history.length - 1] || 0) + value,
     ],
   })),
-  on(undoLastAction, (state) => {
+  on(actions.undoLastAction, (state) => {
     if (state.history.length > 1) {
       return {
         history: state.history.slice(0, -1),
@@ -53,5 +45,5 @@ export function counterHistoryReducer(
   state: CounterHistoryState | undefined,
   action: Action
 ) {
-  return _counterHistoryReducer(state, action);
+  return _counterHistoryReducer(state, action as CounterActions);
 }

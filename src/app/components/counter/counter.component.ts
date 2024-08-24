@@ -1,22 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  increment,
-  decrement,
-  reset,
-  incrementBy,
-  undoLastAction,
-} from '../../store/counter.action';
-import {
-  selectCounter,
-  selectHistory,
-  selectPreviousStates,
-} from '../../store/counter.selectors';
+import * as actions from '../../store/counter.action';
+import * as selector from '../../store/counter.selectors';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CounterState } from '../../store/counter.reducer';
-import { CounterHistoryState } from '../../store/counter-history.reducer';
+import { CounterState, CounterHistoryState } from '../../models/types';
 
 @Component({
   selector: 'app-counter',
@@ -25,7 +14,7 @@ import { CounterHistoryState } from '../../store/counter-history.reducer';
   templateUrl: './counter.component.html',
   styleUrl: './counter.component.css',
 })
-export class CounterComponent {
+export class CounterComponent implements OnInit {
   count$!: Observable<CounterState>;
   history$!: Observable<CounterHistoryState>;
   previousState$!: Observable<CounterState>;
@@ -34,28 +23,28 @@ export class CounterComponent {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.count$ = this.store.select(selectCounter);
-    this.history$ = this.store.select(selectHistory);
-    this.previousState$ = this.store.select(selectPreviousStates);
+    this.count$ = this.store.select(selector.selectCounter);
+    this.history$ = this.store.select(selector.selectHistory);
+    this.previousState$ = this.store.select(selector.selectPreviousStates);
   }
 
   increment(): void {
-    this.store.dispatch(increment());
+    this.store.dispatch(actions.increment());
   }
 
   decrement(): void {
-    this.store.dispatch(decrement());
+    this.store.dispatch(actions.decrement());
   }
 
   reset(): void {
-    this.store.dispatch(reset());
+    this.store.dispatch(actions.reset());
   }
 
   incrementBy(): void {
-    this.store.dispatch(incrementBy({ value: this.incrementByValue }));
+    this.store.dispatch(actions.incrementBy({ value: this.incrementByValue }));
   }
 
   undoLastAction(): void {
-    this.store.dispatch(undoLastAction());
+    this.store.dispatch(actions.undoLastAction());
   }
 }

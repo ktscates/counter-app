@@ -1,49 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store, provideStore } from '@ngrx/store';
-import { of } from 'rxjs';
 import { CounterComponent } from './counter.component';
 import { reducers } from '../../store/reducers';
-import {
-  increment,
-  decrement,
-  reset,
-  incrementBy,
-  undoLastAction,
-} from '../../store/counter.action';
-import {
-  selectCounter,
-  selectHistory,
-  selectPreviousStates,
-} from '../../store/counter.selectors';
-import { CounterState } from '../../store/counter.reducer';
-import { CounterHistoryState } from '../../store/counter-history.reducer';
-
-// Mock the selectors
-jest.mock('../../store/counter.selectors', () => ({
-  selectCounter: jest.fn(),
-  selectHistory: jest.fn(),
-  selectPreviousStates: jest.fn(),
-}));
+import * as actions from '../../store/counter.action';
+import * as type from '../../models/types';
+import { counterReducer } from '../../store/counter.reducer';
+import * as selector from '../../store/counter.selectors';
+import { counterHistoryReducer } from '../../store/counter-history.reducer';
 
 describe('CounterComponent', () => {
   let component: CounterComponent;
   let fixture: ComponentFixture<CounterComponent>;
   let store: Store;
-  let consoleSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CounterComponent],
-      providers: [
-        provideStore(reducers), // Adjust according to your actual state structure
-      ],
+      providers: [provideStore(reducers)],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CounterComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(Store);
-
-    consoleSpy = jest.spyOn(console, 'log');
   });
 
   it('should create', () => {
@@ -60,32 +38,93 @@ describe('CounterComponent', () => {
 
   it('should dispatch increment action ', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
+    const action = actions.increment();
     component.increment();
-    expect(dispatchSpy).toHaveBeenCalledWith(increment());
+    expect(dispatchSpy).toHaveBeenCalledWith(action);
+    expect(action.type).toBe('[Counter] Increment');
   });
 
   it('should dispatch decrement action', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
+    const action = actions.decrement();
     component.decrement();
-    expect(dispatchSpy).toHaveBeenCalledWith(decrement());
+    expect(dispatchSpy).toHaveBeenCalledWith(action);
+    expect(action.type).toBe('[Counter] Decrement');
+  });
+
+  it('should decrement the count and store the previous state when count is greater than 0', () => {
+    const initialState: type.CounterState = {
+      count: 10,
+      previousStates: [0, 1, 5, 7, 9],
+    };
+    const action = actions.decrement();
+    const state = counterReducer(initialState, action);
+    expect(state.count).toBe(9);
+    expect(state.previousStates).toStrictEqual([0, 1, 5, 7, 9, 10]);
   });
 
   it('should dispatch reset action', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
+    const action = actions.reset();
     component.reset();
-    expect(dispatchSpy).toHaveBeenCalledWith(reset());
+    expect(dispatchSpy).toHaveBeenCalledWith(action);
+    expect(action.type).toBe('[Counter] Reset');
   });
 
   it('should dispatch incrementBy action with value', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
-    component.incrementByValue = 5;
+    const value = (component.incrementByValue = 5);
+    const action = actions.incrementBy({ value });
     component.incrementBy();
-    expect(dispatchSpy).toHaveBeenCalledWith(incrementBy({ value: 5 }));
+    expect(dispatchSpy).toHaveBeenCalledWith(action);
+    expect(action.type).toBe('[Counter] Increment by');
+    expect(action.value).toBe(value);
   });
 
   it('should dispatch undoLastAction action ', () => {
     const dispatchSpy = jest.spyOn(store, 'dispatch');
+    const action = actions.undoLastAction();
     component.undoLastAction();
-    expect(dispatchSpy).toHaveBeenCalledWith(undoLastAction());
+    expect(dispatchSpy).toHaveBeenCalledWith(action);
+    expect(action.type).toBe('[Counter] Undo Last Action');
+  });
+
+  it('should undo the last action in counter reducer', () => {
+    const initialState: type.CounterState = {
+      count: 10,
+      previousStates: [5, 7, 10],
+    };
+    const action = actions.undoLastAction();
+    const state = counterReducer(initialState, action);
+    expect(state.count).toBe(10);
+    expect(state.previousStates).toEqual([5, 7]);
+  });
+
+  it('should undo the last action in counter history reducer', () => {
+    const initialState: type.CounterHistoryState = {
+      history: [5, 7, 10],
+    };
+    const action = actions.undoLastAction();
+    const state = counterHistoryReducer(initialState, action);
+    expect(state.history).toStrictEqual([5, 7]);
+  });
+
+  it('should select the history from CounterHistoryState', () => {
+    const historyState: type.CounterHistoryState = {
+      history: [1, 2, 3],
+    };
+    const appState: type.AppState = {
+      count: {
+        count: 5,
+        previousStates: [4, 5],
+      },
+      previousStates: {
+        count: 5,
+        previousStates: [4, 5],
+      },
+      history: historyState,
+    };
+    const result = selector.selectHistory.projector(appState);
+    expect(result.history).toStrictEqual([1, 2, 3]);
   });
 });
